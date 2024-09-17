@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset='UTF-8'>
+        <title>Ray Tracer TWO</title>
+    </head>
+
+    <body>
+        <canvas id='canvas' width='550' height='550' style='width: 550x; height: 550px;'></canvas>
+        <style>
+            body{
+                background-color: rgb(172, 172, 172);
+            }
+            canvas{
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        </style>
+    </body>
+
+    <p id='text'>--</p></div>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('webgpu');
+        const CANVAS_WIDTH = canvas.width;
+        const CANVAS_HEIGHT = canvas.height;
+        var FRAME = 1;
+        const MAX_FRAMES = 1000;
+        const simData = new Float32Array([CANVAS_WIDTH, CANVAS_HEIGHT, FRAME, 0]);
+    </script>
+    <script src='meshes.js'></script>
+    <script src='setUpWorld.js'></script>
+    <script src='shaderModule.js'></script>
+    <script src='Main1.js'></script>
+</html>
