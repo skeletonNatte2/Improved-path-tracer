@@ -39,7 +39,7 @@ async function start(){
         },
         format: 'rgba8unorm',
         usage:
-            GPUTextureUsage.COPY_DST |
+            //GPUTextureUsage.COPY_DST |
             GPUTextureUsage.STORAGE_BINDING |
             GPUTextureUsage.TEXTURE_BINDING,
     });
@@ -51,7 +51,7 @@ async function start(){
         },
         format: 'rgba8unorm',
         usage:
-            GPUTextureUsage.COPY_DST |
+            //GPUTextureUsage.COPY_DST |
             GPUTextureUsage.STORAGE_BINDING |
             GPUTextureUsage.TEXTURE_BINDING,
     });
@@ -118,19 +118,26 @@ async function start(){
     });
     device.queue.writeBuffer(camPosUniformBuffer, 0, camPos);
 
-    const triangleUniformBuffer = device.createBuffer({
-        label: 'Triangle Uniform',
-        size: TRIANGLES.byteLength,
+    const simUniformBuffer = device.createBuffer({
+        label: 'Sphere Uniform',
+        size: simData.byteLength,
         usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
     });
-    device.queue.writeBuffer(triangleUniformBuffer, 0, TRIANGLES);
+    device.queue.writeBuffer(simUniformBuffer, 0, simData);
 
-    const AABBUniformBuffer = device.createBuffer({
-        label: 'AABB Uniform',
-        size: AABBS.byteLength,
-        usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+    const triangleStorageBuffer = device.createBuffer({
+        label: 'Triangle Storage',
+        size: TRIANGLES.byteLength,
+        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
     });
-    device.queue.writeBuffer(AABBUniformBuffer, 0, AABBS);
+    device.queue.writeBuffer(triangleStorageBuffer, 0, TRIANGLES);
+
+    const AABBStorageBuffer = device.createBuffer({
+        label: 'AABB Storage',
+        size: AABBS.byteLength,
+        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+    });
+    device.queue.writeBuffer(AABBStorageBuffer, 0, AABBS);
 
     const materialUniformBuffer = device.createBuffer({
         label: 'Material Uniform',
@@ -139,12 +146,12 @@ async function start(){
     });
     device.queue.writeBuffer(materialUniformBuffer, 0, MATERIALS);
 
-    const simUniformBuffer = device.createBuffer({
-        label: 'Sphere Uniform',
-        size: simData.byteLength,
-        usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+    const meshDataUniformBuffer = device.createBuffer({
+        label: 'Mesh Uniform',
+        size: MESH_DATA.byteLength,
+        usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
     });
-    device.queue.writeBuffer(simUniformBuffer, 0, simData);
+    device.queue.writeBuffer(meshDataUniformBuffer, 0, MESH_DATA);
 
 
     const computeBindGroups = [
@@ -170,19 +177,23 @@ async function start(){
                 },
                 {
                     binding: 4,
-                    resource: { buffer: triangleUniformBuffer }
+                    resource: { buffer: simUniformBuffer }
                 },
                 {
                     binding: 5,
-                    resource: { buffer: AABBUniformBuffer }
+                    resource: { buffer: triangleStorageBuffer }
                 },
                 {
                     binding: 6,
-                    resource: { buffer: materialUniformBuffer }
+                    resource: { buffer: AABBStorageBuffer }
                 },
                 {
                     binding: 7,
-                    resource: { buffer: simUniformBuffer }
+                    resource: { buffer: materialUniformBuffer }
+                },
+                {
+                    binding: 8,
+                    resource: { buffer: meshDataUniformBuffer }
                 },
             ],
         }),
@@ -208,19 +219,23 @@ async function start(){
                 },
                 {
                     binding: 4,
-                    resource: { buffer: triangleUniformBuffer }
+                    resource: { buffer: simUniformBuffer }
                 },
                 {
                     binding: 5,
-                    resource: { buffer: AABBUniformBuffer }
+                    resource: { buffer: triangleStorageBuffer }
                 },
                 {
                     binding: 6,
-                    resource: { buffer: materialUniformBuffer }
+                    resource: { buffer: AABBStorageBuffer }
                 },
                 {
                     binding: 7,
-                    resource: { buffer: simUniformBuffer }
+                    resource: { buffer: materialUniformBuffer }
+                },
+                {
+                    binding: 8,
+                    resource: { buffer: meshDataUniformBuffer }
                 },
             ],
         })
@@ -354,7 +369,7 @@ async function start(){
     const WORK_GROUP_SIZE = Math.ceil(CANVAS_WIDTH/8);
 
     function mainLoop(){
-        //document.getElementById('text').innerHTML = FRAME;
+        document.getElementById('frame').innerHTML = FRAME;
         updateCam();
 
         const encoder = device.createCommandEncoder({ label: 'encoder' });
@@ -401,7 +416,7 @@ async function start(){
 
 var frame0 = FRAME;
 setInterval(function(){
-    document.getElementById('text').innerHTML = FRAME - frame0;
+    document.getElementById('fps').innerHTML = FRAME - frame0;
     frame0 = FRAME;
 },1000);
 start();
