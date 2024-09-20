@@ -1,4 +1,4 @@
-const BVH_MAX_DEPTH = 14;
+const BVH_MAX_DEPTH = 18;
 
 const camPos = new Float32Array([-1, 1.5, -4.5]);
 const camDir = new Float32Array([0.09, -0.2]);
@@ -17,6 +17,7 @@ var SPACE = false;
 var TRIANGLES = [];
 var AABBS = [];
 var MATERIALS = [];
+var MESH_DATA = [];
 
 
 class Material{
@@ -171,9 +172,9 @@ class Mesh{
         lines.forEach(line => {
             let data = line.trim().split(' ');
             if(data[0] == 'v'){
-                let x = this.scale * data[1] + this.shiftX;
+                let x = -this.scale * data[1] + this.shiftX;
                 let y = this.scale * data[2] + this.shiftY;
-                let z = this.scale * data[3] + this.shiftZ;
+                let z = -this.scale * data[3] + this.shiftZ;
                 this.vertices.push([
                     x,
                     y,
@@ -254,13 +255,21 @@ class Mesh{
         });
 
         this.boundingBox.add();
-        //this.boundingBox.split();
+        MESH_DATA.push(this.boundingBox.index);
+        this.boundingBox.split();
 
         this.material.add();
     }
 }
 
 function setUpWorld(){
+    /*for(let i = 0; i < NUM_BOUNDING_BOXES; i++){
+        AABBS[i].split();
+    }
+    NUM_BOUNDING_BOXES = AABBS.length;*/
+
+    MESH_DATA = new Uint32Array(MESH_DATA);
+
     for(let i = 0; i < TRIANGLES.length; i++){
         let tri = TRIANGLES[i];
         TRIANGLES[i] = [
@@ -276,10 +285,9 @@ function setUpWorld(){
     }
     TRIANGLES = TRIANGLES.flat(2);
     TRIANGLES = new Float32Array(TRIANGLES);
-    
-    for(let i = 0; i < AABBS.length; i++){
+
+    for(let i = 0; i < NUM_BOUNDING_BOXES; i++){
         let bB = AABBS[i];
-        //document.getElementById('text').innerHTML += bB.childIdx + " ";
         AABBS[i] = [
             bB.min,
             bB.startIdx,
@@ -298,36 +306,32 @@ function setUpWorld(){
 }
 
 
-//createMesh(tree2,0.5,-0.75,-0.247,0.5);
-//createMesh(tree,0.325,-3,0,0.4);
-//createMesh(cat, 0.06);
-
 let floor = new Mesh(ground);
 floor.material.r = 0.5;
 floor.material.g = 0.5;
 floor.material.b = 0.5;
-//floor.add();
+floor.add();
 
 /*let dodecaMesh = new Mesh(dodecahedron);
-dodecaMesh.shiftX = -1.5;
-dodecaMesh.shiftY = 1.75;
-dodecaMesh.shiftZ = 1;
-dodecaMesh.scale = 0.75;
-dodecaMesh.material.r = 0.0;
-dodecaMesh.material.g = 0.0;
-dodecaMesh.material.b = 0.2;
-dodecaMesh.material.materialType = 3;
+dodecaMesh.shiftX = 1.5;
+dodecaMesh.shiftY = 1.0;
+dodecaMesh.shiftZ = 3.5;
+dodecaMesh.scale = 1.0;
+dodecaMesh.material.r = 0.8;
+dodecaMesh.material.g = 0.8;
+dodecaMesh.material.b = 0.8;
+dodecaMesh.material.materialType = 2;
 dodecaMesh.add();*/
 
 /*let icosMesh = new Mesh(icosahedron);
 icosMesh.shiftX = 0.25;
-icosMesh.shiftY = 0.85;
+icosMesh.shiftY = 2.0;
 icosMesh.shiftZ = 3.5;
 icosMesh.scale = 1;
 icosMesh.material.r = 0.9;
-icosMesh.material.g = 0.0;
-icosMesh.material.b = 0.0;
-icosMesh.material.materialType = 4;
+icosMesh.material.g = 0.9;
+icosMesh.material.b = 0.9;
+icosMesh.material.materialType = 2;
 icosMesh.add();*/
 
 /*let cubeMesh = new Mesh(cube);
@@ -341,38 +345,79 @@ cubeMesh.material.b = 0.9;
 cubeMesh.material.materialType = 2;
 cubeMesh.add();*/
 
-/*let pawnMesh = new Mesh(pawn);
-pawnMesh.scale = 0.5;
-pawnMesh.shiftZ = 2;
-pawnMesh.material.r = 0.9;
-pawnMesh.material.g = 0.0;
-pawnMesh.material.b = 0.0;
-pawnMesh.material.materialType = 4;
-pawnMesh.add();*/
+/*let treeMesh = new Mesh(tree2);
+treeMesh.scale = 0.75;
+treeMesh.shiftX = 1.25;
+treeMesh.shiftY = -0.2;
+treeMesh.shiftZ = 3.5;
+treeMesh.material.r = 0.5;
+treeMesh.material.g = 0.51;
+treeMesh.material.b = 0.51;
+treeMesh.material.smoothness = 0.9;
+treeMesh.material.materialType = 2;
+treeMesh.add();*/
 
-let pawnMesh = new Mesh(pawn);
-pawnMesh.scale = 0.5;
-pawnMesh.shiftZ = 2;
-pawnMesh.material.r = 0.989;
-pawnMesh.material.g = 0.945;
-pawnMesh.material.b = 0.735;
-pawnMesh.material.smoothness = 0.6;
-pawnMesh.material.materialType = 3;
-pawnMesh.add();
+let pawnMesh0 = new Mesh(pawn);
+pawnMesh0.scale = 0.45;
+pawnMesh0.shiftX = -0.75;
+pawnMesh0.shiftZ = 3.75;
+pawnMesh0.material.r = 0.05;
+pawnMesh0.material.g = 0.05;
+pawnMesh0.material.b = 0.05;
+pawnMesh0.material.materialType = 3;
+pawnMesh0.add();
+
+let bishMesh = new Mesh(bishop);
+bishMesh.scale = 0.09;
+bishMesh.shiftX = 0.25;
+bishMesh.shiftY = 0.01;
+bishMesh.shiftZ = 0.75;
+bishMesh.material.r = 0.6;
+bishMesh.material.g = 0.62;
+bishMesh.material.b = 0.62;
+bishMesh.material.refractiveIndex = 1.65;
+bishMesh.material.materialType = 4;
+bishMesh.add();
+
+let knightMesh = new Mesh(knight);
+knightMesh.scale = 0.1;
+knightMesh.shiftX = 3.0;
+knightMesh.shiftY = 0.0;
+knightMesh.shiftZ = 4.0;
+knightMesh.material.r = 0.99;
+knightMesh.material.g = 0.95;
+knightMesh.material.b = 0.74;
+//knightMesh.material.smoothness = 0.9;
+knightMesh.material.materialType = 3;
+knightMesh.add();
 
 /*let bunnyMesh = new Mesh(rabbit);
-bunnyMesh.material.r = 0.1;
-bunnyMesh.material.g = 0.1;
-bunnyMesh.material.b = 0.1;
-bunnyMesh.material.materialType = 3;
-bunnyMesh.scale = 0.75;
-bunnyMesh.shiftY = 0.9;
+bunnyMesh.material.r = 0.35;
+bunnyMesh.material.g = 0.0;
+bunnyMesh.material.b = 0.0;
+bunnyMesh.material.materialType = 4;
+bunnyMesh.scale = 0.5;
+bunnyMesh.shiftX = 0.0;
+bunnyMesh.shiftY = 1.05;
+bunnyMesh.shiftZ = 1.5;
 bunnyMesh.add();*/
+
+/*let bunnyMesh2 = new Mesh(bunny);
+bunnyMesh2.material.r = 0.35;
+bunnyMesh2.material.g = 0.0;
+bunnyMesh2.material.b = 0.0;
+bunnyMesh2.material.materialType = 4;
+bunnyMesh2.scale = 0.75;
+bunnyMesh2.shiftX = 0.0;
+bunnyMesh2.shiftY = 0.25;
+bunnyMesh2.shiftZ = 1.5;
+bunnyMesh2.add();*/
 
 /*let birdMesh = new Mesh(finch);
 birdMesh.material.r = 0.9;
 birdMesh.material.g = 0.0;
 birdMesh.material.b = 0.0;
+birdMesh.shiftZ = 2.0;
 birdMesh.material.materialType = 4;
 birdMesh.scale = 18.0;
 birdMesh.shiftY = 0.001;
@@ -380,8 +425,9 @@ birdMesh.add();*/
 
 
 const NUM_TRIANGLES = TRIANGLES.length;
-const NUM_BOUNDING_BOXES = AABBS.length;
 const NUM_MATERIALS = MATERIALS.length;
+const NUM_MESHES = MESH_DATA.length;
+var NUM_BOUNDING_BOXES = AABBS.length;
 setUpWorld();
 
-//document.getElementById('text').innerHTML = NUM_TRIANGLES;
+//document.getElementById('text').innerHTML = MESH_DATA;
