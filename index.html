@@ -7,7 +7,7 @@
     </head>
 
     <body>
-        <canvas id='canvas' width='550' height='550' style='width: 550x; height: 550px;'></canvas>
+        <canvas id='canvas' width='700' height='700' style='width: 550x; height: 550px;'></canvas>
         <style>
             body{
                 background-color: rgb(172, 172, 172);
@@ -21,6 +21,8 @@
         </style>
     </body>
 
+    <p id='fps'>--</p></div>
+    <p id='frame'>--</p></div>
     <p id='text'>--</p></div>
     <script>
         const canvas = document.getElementById('canvas');
@@ -28,7 +30,7 @@
         const CANVAS_WIDTH = canvas.width;
         const CANVAS_HEIGHT = canvas.height;
         var FRAME = 1;
-        const MAX_FRAMES = 1000;
+        const MAX_FRAMES = 4000;
         const simData = new Float32Array([CANVAS_WIDTH, CANVAS_HEIGHT, FRAME, 0]);
     </script>
     <script src='meshes.js'></script>
