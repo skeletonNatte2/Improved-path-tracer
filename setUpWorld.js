@@ -1,4 +1,4 @@
-const BVH_MAX_DEPTH = 18;
+const BVH_MAX_DEPTH = 19;
 
 const camPos = new Float32Array([-1, 1.5, -4.5]);
 const camDir = new Float32Array([0.09, -0.2]);
@@ -263,11 +263,6 @@ class Mesh{
 }
 
 function setUpWorld(){
-    /*for(let i = 0; i < NUM_BOUNDING_BOXES; i++){
-        AABBS[i].split();
-    }
-    NUM_BOUNDING_BOXES = AABBS.length;*/
-
     MESH_DATA = new Uint32Array(MESH_DATA);
 
     for(let i = 0; i < TRIANGLES.length; i++){
@@ -306,123 +301,93 @@ function setUpWorld(){
 }
 
 
-let floor = new Mesh(ground);
-floor.material.r = 0.5;
-floor.material.g = 0.5;
-floor.material.b = 0.5;
-floor.add();
+function chessScene(){
+    let floor = new Mesh(ground);
+    floor.material.r = 0.6;
+    floor.material.g = 0.6;
+    floor.material.b = 0.6;
+    floor.material.materialType = 1;
+    floor.add();
 
-/*let dodecaMesh = new Mesh(dodecahedron);
-dodecaMesh.shiftX = 1.5;
-dodecaMesh.shiftY = 1.0;
-dodecaMesh.shiftZ = 3.5;
-dodecaMesh.scale = 1.0;
-dodecaMesh.material.r = 0.8;
-dodecaMesh.material.g = 0.8;
-dodecaMesh.material.b = 0.8;
-dodecaMesh.material.materialType = 2;
-dodecaMesh.add();*/
+    let pawnMesh0 = new Mesh(pawn);
+    pawnMesh0.scale = 0.45;
+    pawnMesh0.shiftX = -1.0;
+    pawnMesh0.shiftZ = 3.75;
+    pawnMesh0.material.r = 0.99;
+    pawnMesh0.material.g = 0.95;
+    pawnMesh0.material.b = 0.74;
+    pawnMesh0.material.materialType = 3;
+    pawnMesh0.add();
 
-/*let icosMesh = new Mesh(icosahedron);
-icosMesh.shiftX = 0.25;
-icosMesh.shiftY = 2.0;
-icosMesh.shiftZ = 3.5;
-icosMesh.scale = 1;
-icosMesh.material.r = 0.9;
-icosMesh.material.g = 0.9;
-icosMesh.material.b = 0.9;
-icosMesh.material.materialType = 2;
-icosMesh.add();*/
+    let bishMesh = new Mesh(bishop);
+    bishMesh.scale = 0.09;
+    bishMesh.shiftX = 0.25;
+    bishMesh.shiftY = 0.01;
+    bishMesh.shiftZ = 0.75;
+    bishMesh.material.r = 0.62;
+    bishMesh.material.g = 0.62;
+    bishMesh.material.b = 0.62;
+    bishMesh.material.refractiveIndex = 1.65;
+    bishMesh.material.materialType = 4;
+    bishMesh.add();
 
-/*let cubeMesh = new Mesh(cube);
-cubeMesh.scale = 0.5;
-cubeMesh.shiftX = 1.75;
-cubeMesh.shiftY = 0.5;
-cubeMesh.shiftZ = 1;
-cubeMesh.material.r = 0.9;
-cubeMesh.material.g = 0.9;
-cubeMesh.material.b = 0.9;
-cubeMesh.material.materialType = 2;
-cubeMesh.add();*/
+    let knightMesh = new Mesh(knight);
+    knightMesh.scale = 0.1;
+    knightMesh.shiftX = 3.0;
+    knightMesh.shiftY = 0.0;
+    knightMesh.shiftZ = 4.0;
+    knightMesh.material.r = 0.05;
+    knightMesh.material.g = 0.05;
+    knightMesh.material.b = 0.05;
+    knightMesh.material.materialType = 3;
+    knightMesh.add();
+}
 
-/*let treeMesh = new Mesh(tree2);
-treeMesh.scale = 0.75;
-treeMesh.shiftX = 1.25;
-treeMesh.shiftY = -0.2;
-treeMesh.shiftZ = 3.5;
-treeMesh.material.r = 0.5;
-treeMesh.material.g = 0.51;
-treeMesh.material.b = 0.51;
-treeMesh.material.smoothness = 0.9;
-treeMesh.material.materialType = 2;
-treeMesh.add();*/
+function bunnyScene(lowRes = false){
+    let floor = new Mesh(ground);
+    floor.material.r = 0.6;
+    floor.material.g = 0.6;
+    floor.material.b = 0.6;
+    floor.material.materialType = 1;
+    floor.add();
 
-let pawnMesh0 = new Mesh(pawn);
-pawnMesh0.scale = 0.45;
-pawnMesh0.shiftX = -0.75;
-pawnMesh0.shiftZ = 3.75;
-pawnMesh0.material.r = 0.05;
-pawnMesh0.material.g = 0.05;
-pawnMesh0.material.b = 0.05;
-pawnMesh0.material.materialType = 3;
-pawnMesh0.add();
+    let bunnyMesh = new Mesh(bunny);
+    bunnyMesh.shiftY = 0.3;
+    bunnyMesh.shiftZ = 1.2;
+    if(lowRes){
+        bunnyMesh.fileText = rabbit;
+        bunnyMesh.shiftX = 0.5;
+        bunnyMesh.shiftY = 1;
+        bunnyMesh.shiftZ = 1.2;
+    }
+    bunnyMesh.scale = 0.85;
+    bunnyMesh.material.r = 0.35;
+    bunnyMesh.material.g = 0.0;
+    bunnyMesh.material.b = 0.0;
+    bunnyMesh.material.materialType = 4;
+    bunnyMesh.add();
+}
 
-let bishMesh = new Mesh(bishop);
-bishMesh.scale = 0.09;
-bishMesh.shiftX = 0.25;
-bishMesh.shiftY = 0.01;
-bishMesh.shiftZ = 0.75;
-bishMesh.material.r = 0.6;
-bishMesh.material.g = 0.62;
-bishMesh.material.b = 0.62;
-bishMesh.material.refractiveIndex = 1.65;
-bishMesh.material.materialType = 4;
-bishMesh.add();
+function birdScene(){
+    let floor = new Mesh(ground);
+    floor.material.r = 0.6;
+    floor.material.g = 0.6;
+    floor.material.b = 0.6;
+    floor.material.materialType = 1;
+    floor.add();
 
-let knightMesh = new Mesh(knight);
-knightMesh.scale = 0.1;
-knightMesh.shiftX = 3.0;
-knightMesh.shiftY = 0.0;
-knightMesh.shiftZ = 4.0;
-knightMesh.material.r = 0.99;
-knightMesh.material.g = 0.95;
-knightMesh.material.b = 0.74;
-//knightMesh.material.smoothness = 0.9;
-knightMesh.material.materialType = 3;
-knightMesh.add();
+    let birdMesh = new Mesh(finch);
+    birdMesh.material.r = 0.35;
+    birdMesh.material.g = 0.0;
+    birdMesh.material.b = 0.0;
+    birdMesh.shiftZ = 2.0;
+    birdMesh.material.materialType = 4;
+    birdMesh.scale = 18.0;
+    birdMesh.shiftY = 0.001;
+    birdMesh.add();
+}
 
-/*let bunnyMesh = new Mesh(rabbit);
-bunnyMesh.material.r = 0.35;
-bunnyMesh.material.g = 0.0;
-bunnyMesh.material.b = 0.0;
-bunnyMesh.material.materialType = 4;
-bunnyMesh.scale = 0.5;
-bunnyMesh.shiftX = 0.0;
-bunnyMesh.shiftY = 1.05;
-bunnyMesh.shiftZ = 1.5;
-bunnyMesh.add();*/
-
-/*let bunnyMesh2 = new Mesh(bunny);
-bunnyMesh2.material.r = 0.35;
-bunnyMesh2.material.g = 0.0;
-bunnyMesh2.material.b = 0.0;
-bunnyMesh2.material.materialType = 4;
-bunnyMesh2.scale = 0.75;
-bunnyMesh2.shiftX = 0.0;
-bunnyMesh2.shiftY = 0.25;
-bunnyMesh2.shiftZ = 1.5;
-bunnyMesh2.add();*/
-
-/*let birdMesh = new Mesh(finch);
-birdMesh.material.r = 0.9;
-birdMesh.material.g = 0.0;
-birdMesh.material.b = 0.0;
-birdMesh.shiftZ = 2.0;
-birdMesh.material.materialType = 4;
-birdMesh.scale = 18.0;
-birdMesh.shiftY = 0.001;
-birdMesh.add();*/
-
+chessScene();
 
 const NUM_TRIANGLES = TRIANGLES.length;
 const NUM_MATERIALS = MATERIALS.length;
@@ -430,4 +395,4 @@ const NUM_MESHES = MESH_DATA.length;
 var NUM_BOUNDING_BOXES = AABBS.length;
 setUpWorld();
 
-//document.getElementById('text').innerHTML = MESH_DATA;
+document.getElementById('text').innerHTML = "Triangles: " + NUM_TRIANGLES;
