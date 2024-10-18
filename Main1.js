@@ -39,7 +39,6 @@ async function start(){
         },
         format: 'rgba8unorm',
         usage:
-            //GPUTextureUsage.COPY_DST |
             GPUTextureUsage.STORAGE_BINDING |
             GPUTextureUsage.TEXTURE_BINDING,
     });
@@ -51,7 +50,6 @@ async function start(){
         },
         format: 'rgba8unorm',
         usage:
-            //GPUTextureUsage.COPY_DST |
             GPUTextureUsage.STORAGE_BINDING |
             GPUTextureUsage.TEXTURE_BINDING,
     });
@@ -369,7 +367,7 @@ async function start(){
     const WORK_GROUP_SIZE = Math.ceil(CANVAS_WIDTH/8);
 
     function mainLoop(){
-        document.getElementById('frame').innerHTML = FRAME;
+        document.getElementById('frame').innerHTML = "Frame: " + FRAME;
         updateCam();
 
         const encoder = device.createCommandEncoder({ label: 'encoder' });
@@ -416,7 +414,7 @@ async function start(){
 
 var frame0 = FRAME;
 setInterval(function(){
-    document.getElementById('fps').innerHTML = FRAME - frame0;
+    document.getElementById('fps').innerHTML = "FPS: " + (FRAME - frame0);
     frame0 = FRAME;
 },1000);
 start();
